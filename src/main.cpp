@@ -1,12 +1,12 @@
 #include "Seeed_BME280.h"
-#include <Wire.h>
+//#include <Wire.h>
 
 BME280 bme280;
 
 void setup()
 {
   Serial.begin(9600);
-  if(!bme280.init()){
+  if(!bme280.init()) {
     Serial.println("Device error!");
   }
 }
