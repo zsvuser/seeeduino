@@ -1,39 +1,37 @@
-#include "Seeed_BME280.h"
-//#include <Wire.h>
 
-BME280 bme280;
+#define TINY_BME280_I2C
+#include "TinyBME280.h"
+tiny::BME280 mySensor;
 
 void setup()
 {
   Serial.begin(9600);
-  if(!bme280.init()) {
-    Serial.println("Device error!");
+  Serial.println("Reading basic values from BME280");
+
+  mySensor.setI2CAddress(0x76);
+
+  if (mySensor.begin() == false) //Begin communication over I2C and Address 0x77
+  {
+    Serial.println("The sensor did not respond. Please check wiring.");
+    while(1); //Freeze
   }
 }
 
 void loop()
 {
-  float pressure;
-  
-  //get and print temperatures
-  Serial.print("Temp: ");
-  Serial.print(bme280.getTemperature());
-  Serial.println("C");//The unit for  Celsius because original arduino don't support speical symbols
-  
-  //get and print atmospheric pressure data
-  Serial.print("Pressure: ");
-  Serial.print(pressure = bme280.getPressure());
-  Serial.println("Pa");
+  Serial.print(F("Temperature in Celsius:\t\t"));
+  Serial.println(mySensor.readFixedTempC() / 100.0); //Output value of "5123" equals 51.23 DegC.
 
-  //get and print altitude data
-  Serial.print("Altitude: ");
-  Serial.print(bme280.calcAltitude(pressure));
-  Serial.println("m");
+  Serial.print(F("Temperature in Fahrenheit:\t"));
+  Serial.println(mySensor.readFixedTempF() / 100.0); //Output value of "7470" equals 74.70 DegF.
 
-  //get and print humidity data
-  Serial.print("Humidity: ");
-  Serial.print(bme280.getHumidity());
-  Serial.println("%");
+  Serial.print(F("Humidity in %:\t\t\t"));
+  Serial.println(mySensor.readFixedHumidity() / 1000.0); //Output value of "47445" represents 47.445 %RH
 
-  delay(1000);
+  Serial.print(F("Pressure in hPa:\t\t"));
+  Serial.println(mySensor.readFixedPressure() / 100.0); //Output value of "96386" equals 96386Pa = 963.86 hPa
+
+  Serial.println();
+
+  delay(1500);
 }
