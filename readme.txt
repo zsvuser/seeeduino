@@ -34,3 +34,18 @@ void loop()
 
   delay(1500);
 }
+
+
+[env:env1]
+platform = atmelavr
+board = ATmega328P
+framework = arduino
+lib_deps = fabyte/Tiny BME280@^1.0.2
+
+
+[env:uno]
+platform = atmelavr
+board = uno
+framework = arduino
+lib_deps = fabyte/Tiny BME280@^1.0.2
+
